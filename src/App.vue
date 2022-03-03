@@ -36,9 +36,7 @@ export default {
     },
     methods: {
         createPost(post, second, third){
-           console.log(post);
-            console.log(second);
-             console.log(third);
+           this.posts.push(post);
         },
  
 
