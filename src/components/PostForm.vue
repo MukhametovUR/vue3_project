@@ -1,29 +1,29 @@
 <template>
       <form @submit.prevent>
         <h4>Название поста</h4>
-        <input  
-            v-model="post.title"
+        <my-input  
+            v-model:value="post.title"
             @input="post.title = $event.target.value" 
             type="text" 
-            class="input" 
             placeholder="Название "
-        >
-        <input 
-        v-model="post.body"
+        />
+        <my-input 
+            v-model:value="post.body"
             @input="post.body = $event.target.value" 
             type="text" 
-            class="input" 
-            placeholder="Описание ">
-        <button 
+            placeholder="Описание "
+        />
+        <my-button 
             class="btn" 
             @click="createPost"
         >
         Создать
-        </button>
+        </my-button>
     </form>
 </template>
 
 <script>
+
 export default {
     data(){
        return {
@@ -52,20 +52,4 @@ form {
     flex-direction: column;
 }
 
-.input {
-    width: 100%;
-    border: 1px solid teal;
-    margin-top: 15px;
-    height: 40px;
-    padding-left: 10px;
-}
-
-.btn {
-    align-self: flex-end;
-    margin-top: 15px;
-    padding: 10px 15px;
-    background: none;
-    color: teal;
-    border-radius: 10px;
-}
 </style>

@@ -3,9 +3,11 @@
     <div>
         <h3>Список пользователей</h3>
         <post-item 
-        class="post"
-        :post="post" 
         v-for="post in posts"
+        :post="post" 
+        class="post"
+        :key="post.id"
+        @remove="$emit('remove', post)"      
         >
     </post-item>
     </div>
