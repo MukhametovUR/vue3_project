@@ -1,12 +1,22 @@
 <template>
-       <div class="post" v-for="post in posts">
-        <div><strong>Название</strong> {{ post.title }}</div>
-        <div><strong>Описание</strong> {{ post.body }}</div>
+
+    <div>
+        <h3>Список пользователей</h3>
+        <post-item 
+        class="post"
+        :post="post" 
+        v-for="post in posts"
+        >
+    </post-item>
     </div>
+       
+
 </template>
 
 <script>
+import PostItem from './PostItem.vue'
 export default {
+  components: { PostItem },
     props: {                //Для двухстороннего связывания
         posts: {            //То что ожидается на вход
             type: Array,    //Указываем тип данных

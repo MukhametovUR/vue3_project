@@ -30,7 +30,7 @@ export default {
             {id:1, title:'JavaScript1', body:'Описание поста1'},
             {id:2, title:'JavaScript2', body:'Описание поста2'},
             {id:3, title:'JavaScript3', body:'Описание поста3'},
-            {id:4, title:'JavaScript3', body:'Описание поста3'},
+            {id:4, title:'JavaScript4', body:'Описание поста4'},
             ],
         }
     },
