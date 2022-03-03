@@ -8,7 +8,7 @@ const app = createApp(App);
 components.forEach(component => {
     app.component(component.name, component);
     console.log(component.name);
-    console.log(component)
+    console.log(component);
 });
 
 
