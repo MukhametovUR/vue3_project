@@ -2,6 +2,11 @@
 
 <div class="app">
     <h1>Страница с постами</h1>
+    <my-input
+        v-model="searchQuery"
+        placeholder="Поиск..."
+    >
+    </my-input>
     <div class="app__btns">
         <my-button
             @click="showDialog"
@@ -25,7 +30,7 @@
     
      
     <post-list 
-        :posts="sortedPosts"
+        :posts="sortedAndSearchedPosts"
         @remove="removePost"
         v-if="!isPostsLoading"
     />    
@@ -39,11 +44,14 @@ import PostForm from '@/components/PostForm.vue';
 import PostList from '@/components/PostList.vue';
 import MyDialog from '@/components/UI/MyDialog.vue';
 import axios from 'axios';
+import MyInput from '@/components/UI/MyInput.vue';
 
 export default {
     components:{
-        PostList, PostForm,
-        MyDialog
+        PostList, 
+        PostForm,
+        MyDialog, 
+        MyInput
 
     },
     data(){
@@ -52,6 +60,7 @@ export default {
             dialogVisible:false,
             isPostsLoading: false,//Индикатор загрузки страницы
             selectedSort: '',
+            searchQuery:'',
             sortOptions: [
                 {value:'title', name:'По названию'},
                 {value:'body', name:'По описанию'}
@@ -94,6 +103,9 @@ export default {
         sortedPosts() {
             return [...this.posts].sort((post1, post2)=> post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
             // Массив с постами разворачивапм в другой массив для сортировки нового массива
+        },
+        sortedAndSearchedPosts(){
+            return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
         }
     },
 
