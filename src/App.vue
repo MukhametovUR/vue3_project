@@ -19,9 +19,9 @@
     <post-list 
         :posts="posts"
         @remove="removePost"
-    >
-
-    </post-list>
+        v-if="!isPostsLoading"
+    />    
+    <div v-else>Идет загрузка...</div>
 </div>
 
 </template>
@@ -30,7 +30,7 @@
 import PostForm from '@/components/PostForm.vue';
 import PostList from '@/components/PostList.vue';
 import MyDialog from '@/components/UI/MyDialog.vue';
-
+import axios from 'axios';
 
 export default {
     components:{
@@ -40,13 +40,9 @@ export default {
     },
     data(){
         return {
-            posts: [
-            {id:1, title:'JavaScript1', body:'Описание поста1'},
-            {id:2, title:'JavaScript2', body:'Описание поста2'},
-            {id:3, title:'JavaScript3', body:'Описание поста3'},
-            {id:4, title:'JavaScript4', body:'Описание поста4'},
-            ],
+            posts: [],
             dialogVisible:false,
+            isPostsLoading: false,//Индикатор загрузки страницы
         }
     },
     methods: {
@@ -59,8 +55,27 @@ export default {
         },
         showDialog(){
             this.dialogVisible = true;
+        },
+        //Функция для работы с сервером при помощи Axios
+        async fetchPosts() {
+            try {             
+                this.isPostsLoading = true;//Отображаем индикатор загрузки перед отправкой запроса   
+                    const response = await 
+                    axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+                    this.posts = response.data;
+                //Делаем запрос на сервер и ответ помещаем в response
+            }catch(e){
+                //Отлавливаем ошибки при запросе на сервер
+                alert('Ошибка')
+            }finally {
+              this.isPostsLoading = false;//Скрываем индикатор загрузки после получение ответа
+
+            }
         }
 
+    },
+    mounted(){
+        this.fetchPosts();//Хук для монтироание запроса из удаленного сервера
     }
 }
 </script>
