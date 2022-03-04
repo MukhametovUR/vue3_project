@@ -2,12 +2,20 @@
 
 <div class="app">
     <h1>Страница с постами</h1>
-    <my-button
-    @click="showDialog"
-    class="btn-show"
-    >
-    Создать пост
-    </my-button>   
+    <div class="app__btns">
+        <my-button
+            @click="showDialog"
+            class="btn-show"
+        >
+        Создать пост
+        </my-button>
+
+        <my-select
+            v-model="selectedSort"
+            :options="sortOptions"
+        >
+        </my-select>
+    </div>   
     <my-dialog v-model:show="dialogVisible">
         <post-form
             @create="createPost"
@@ -17,7 +25,7 @@
     
      
     <post-list 
-        :posts="posts"
+        :posts="sortedPosts"
         @remove="removePost"
         v-if="!isPostsLoading"
     />    
@@ -43,6 +51,11 @@ export default {
             posts: [],
             dialogVisible:false,
             isPostsLoading: false,//Индикатор загрузки страницы
+            selectedSort: '',
+            sortOptions: [
+                {value:'title', name:'По названию'},
+                {value:'body', name:'По описанию'}
+            ]
         }
     },
     methods: {
@@ -76,7 +89,28 @@ export default {
     },
     mounted(){
         this.fetchPosts();//Хук для монтироание запроса из удаленного сервера
+    },
+    computed:{
+        sortedPosts() {
+            return [...this.posts].sort((post1, post2)=> post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
+            // Массив с постами разворачивапм в другой массив для сортировки нового массива
+        }
+    },
+
+    /*
+    watch:{//Функция наблюдатель
+        selectedSort(newValue){ //Функция наблюдатель должна иметь такое название как и модель в компоненте
+            this.posts.sort((post1, post2)=> {
+                    return post1[this.selectedSort]?.localeCompare(post2[this.selectedSort])
+            
+            // Сравниваем название одного поста с другим
+            // Либо описани одного поста с другим
+            // При помощи ?.localeCompare - сравниваем  строки
+            
+            })
+        }
     }
+    */
 }
 </script>
 
@@ -93,5 +127,9 @@ padding: 20px;
 .btn-show {
     margin: 15px 0;
 }
-
+.app__btns {
+    margin:15px 0;
+    display: flex;
+    justify-content: space-between;
+}
 </style>

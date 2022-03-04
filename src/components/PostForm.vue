@@ -42,7 +42,17 @@ export default {
                 body: '',
             }
         },
+    },
+    /*watch: {
+        post: {
+            handler(newValue){
+                console.log(newValue)
+            },
+            deep:true
+        }
     }
+    //Отслеживание событий при помощи функции наблюдатель
+    */
 }
 </script>
 
