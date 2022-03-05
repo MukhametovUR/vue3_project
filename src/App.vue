@@ -35,7 +35,8 @@
         v-if="!isPostsLoading"
     />    
     <div v-else>Идет загрузка...</div>
-    <div class="page__wrapper">
+    <div ref="observer" class="observer"></div>
+    <!-- <div class="page__wrapper">
         <div 
             v-for="pageNumber in totalPages" 
             :key="pageNumber"
@@ -47,7 +48,7 @@
         > 
             {{ pageNumber }} 
         </div>
-    </div>
+    </div> -->
 </div>
 
 </template>
@@ -117,11 +118,43 @@ export default {
               this.isPostsLoading = false;//Скрываем индикатор загрузки после получение ответа
             }
         },
+        async loadMorePosts() {
+            try { 
+                this.page += 1;            
+                    const response = await axios.get('https://jsonplaceholder.typicode.com/posts',{
+                        params: {
+                            _page: this.page,
+                            _limit: this.limit,
+                        }
+                    });
+                    this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit)
+                    this.posts = [...this.posts, ...response.data];
+                //Делаем запрос на сервер и ответ помещаем в response
+            }catch(e){
+                //Отлавливаем ошибки при запросе на сервер
+                alert('Ошибка')
+            }
+        },
 
     },
     mounted(){
         this.fetchPosts();//Хук для монтироание запроса из удаленного сервера
-    },
+        console.log(this.$refs.observer);//Прямое обращение к DOM элементу             
+
+       const options = {
+            root: document.querySelector('#scrollArea'),
+            rootMargin: '0px',
+            threshold: 1.0
+        }
+            const callback = (entries, observer) => {
+                if (entries[0].isIntersecting && this.page < this.totalPages){
+                    this.loadMorePosts();
+                }
+            
+        };
+            const observer = new IntersectionObserver(callback, options);
+            observer.observe(this.$refs.observer);
+        },
     computed:{
         sortedPosts() {
             return [...this.posts].sort((post1, post2)=> post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
@@ -132,9 +165,9 @@ export default {
         }
     },
     watch: {
-        page(){
-            this.fetchPosts();
-        }
+        // page(){
+        //     this.fetchPosts();
+        // }
     },
     /*
     watch:{//Функция наблюдатель
@@ -181,5 +214,9 @@ padding: 20px;
 }
 .current-page {
     border: 3px solid teal;
+}
+.observer {
+    height: 50px;
+    background: green;
 }
 </style>
