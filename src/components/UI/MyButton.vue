@@ -18,6 +18,6 @@ export default {
     padding: 10px 15px;
     background: none;
     color: teal;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 </style>
