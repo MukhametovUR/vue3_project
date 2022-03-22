@@ -2,6 +2,7 @@
       <form @submit.prevent>
         <h4>Название поста</h4>
         <my-input  
+            v-focus
             v-model:value="post.title"
             @input="post.title = $event.target.value" 
             type="text" 
@@ -42,7 +43,17 @@ export default {
                 body: '',
             }
         },
+    },
+    /*watch: {
+        post: {
+            handler(newValue){
+                console.log(newValue)
+            },
+            deep:true
+        }
     }
+    //Отслеживание событий при помощи функции наблюдатель
+    */
 }
 </script>
 
